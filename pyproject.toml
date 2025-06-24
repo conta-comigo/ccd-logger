@@ -1,0 +1,19 @@
+[project]
+name = "ccd_logger"
+version = "0.1.0"
+description = "Biblioteca padrão de logging estruturado para as aplicações da Conta Comigo Digital."
+authors = [
+  { name="Iago Santana", email="iago.gomes@contacomigo.digital" }
+]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+
+dependencies = [
+  "python-json-logger>=2.0.7",
+  "typing-extensions>=4.0.0"
+]
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"

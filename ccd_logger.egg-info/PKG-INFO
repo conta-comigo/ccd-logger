@@ -1,0 +1,19 @@
+Metadata-Version: 2.4
+Name: ccd_logger
+Version: 0.1.0
+Summary: Biblioteca padrão de logging estruturado para as aplicações da Conta Comigo Digital.
+Author-email: Iago Santana <iago.gomes@contacomigo.digital>
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: python-json-logger>=2.0.7
+Requires-Dist: typing-extensions>=4.0.0
+
+# Conta Comigo Digital Logger
+Biblioteca de logging estruturado para as aplicações da fintech Conta Comigo Digital.
+
+## Instalação
+
+```bash
+pip install git+ssh://git@github.com/ccd/fintech_logger.git@v0.1.0
+```
