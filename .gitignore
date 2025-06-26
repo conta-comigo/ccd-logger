@@ -1,0 +1,8 @@
+# Exemplo básico
+__pycache__/
+*.pyc
+*.env
+.aws/
+.idea/
+.vscode/
+*.log
