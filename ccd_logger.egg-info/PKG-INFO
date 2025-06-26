@@ -15,5 +15,5 @@ Biblioteca de logging estruturado para as aplicações da fintech Conta Comigo D
 ## Instalação
 
 ```bash
-pip install git+ssh://git@github.com/ccd/fintech_logger.git@v0.1.0
+pip install git+HTTPS://git@github.com:conta-comigo/ccd-logger.git
 ```
