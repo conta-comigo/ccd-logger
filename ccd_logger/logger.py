@@ -13,8 +13,15 @@ class JsonFormatterSIEM(jsonlogger.JsonFormatter):
             fmt += " %(function_name)s %(memory_limit_in_mb)s %(request_id)s"
         super().__init__(fmt, *args, **kwargs)
 
+class CustomLoggerAdapter(logging.LoggerAdapter):
+    def process(self, msg, kwargs):
+        extra = self.extra.copy()
+        extra.update(kwargs.get("extra", {}))
+        kwargs["extra"] = extra
+        return msg, kwargs
 
-def get_logger(name=None, context="generic") -> logging.LoggerAdapter:
+
+def get_logger(name=None, context="generic") -> CustomLoggerAdapter:
     """
     Retorna um logger padronizado para o contexto especificado.
 
@@ -38,7 +45,7 @@ def get_logger(name=None, context="generic") -> logging.LoggerAdapter:
     logger.setLevel(config["log_level"].upper())
     logger.propagate = False
 
-    return logging.LoggerAdapter(logger, {
+    return CustomLoggerAdapter(logger, {
         "service": config["service_name"],
         "environment": config["environment"],
     })
