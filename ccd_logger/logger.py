@@ -26,7 +26,18 @@ def get_logger(name=None, context="generic", context_data=None) -> CustomLoggerA
     logger = logging.getLogger(name or config["service_name"])
 
     if logger.handlers:
-        return CustomLoggerAdapter(logger, logger.handlers[0].formatter.extra)
+        # Apenas retorna com os mesmos handlers, mas cria um novo LoggerAdapter com extra correto
+        return CustomLoggerAdapter(logger, {
+            "service": config["service_name"],
+            "environment": config["environment"],
+            **(
+                {
+                    "function_name": context_data.function_name,
+                    "memory_limit_in_mb": context_data.memory_limit_in_mb,
+                    "request_id": context_data.aws_request_id,
+                } if context == "lambda" and context_data else {}
+            )
+        })
 
     handler = logging.StreamHandler(sys.stdout)
 
@@ -40,7 +51,7 @@ def get_logger(name=None, context="generic", context_data=None) -> CustomLoggerA
     logger.setLevel(config["log_level"].upper())
     logger.propagate = False
 
-    # Adiciona campos comuns + lambda context
+    # Constrói o dict extra de forma segura
     extra = {
         "service": config["service_name"],
         "environment": config["environment"],
