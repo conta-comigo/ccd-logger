@@ -21,17 +21,12 @@ class CustomLoggerAdapter(logging.LoggerAdapter):
         return msg, kwargs
 
 
-def get_logger(name=None, context="generic") -> CustomLoggerAdapter:
-    """
-    Retorna um logger padronizado para o contexto especificado.
-
-    context: "django" | "lambda" | "generic"
-    """
+def get_logger(name=None, context="generic", context_data=None) -> CustomLoggerAdapter:
     config = get_config()
     logger = logging.getLogger(name or config["service_name"])
 
     if logger.handlers:
-        return logger
+        return CustomLoggerAdapter(logger, logger.handlers[0].formatter.extra)
 
     handler = logging.StreamHandler(sys.stdout)
 
@@ -45,7 +40,17 @@ def get_logger(name=None, context="generic") -> CustomLoggerAdapter:
     logger.setLevel(config["log_level"].upper())
     logger.propagate = False
 
-    return CustomLoggerAdapter(logger, {
+    # Adiciona campos comuns + lambda context
+    extra = {
         "service": config["service_name"],
         "environment": config["environment"],
-    })
+    }
+
+    if context == "lambda" and context_data:
+        extra.update({
+            "function_name": context_data.function_name,
+            "memory_limit_in_mb": context_data.memory_limit_in_mb,
+            "request_id": context_data.aws_request_id,
+        })
+
+    return CustomLoggerAdapter(logger, extra)
